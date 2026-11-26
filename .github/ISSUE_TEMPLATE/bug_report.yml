@@ -1,0 +1,52 @@
+﻿name: Bug report
+description: Report a reproducible bug using owned/synthetic fixtures
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for reproducible bugs. Do not attach proprietary game assets, dumps, extracted shaders, or copyrighted content.
+  - type: input
+    id: commit
+    attributes:
+      label: Commit / version
+      placeholder: "commit hash or release tag"
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU / driver / OS
+      placeholder: "RX 5700 XT, Adrenalin xx.x.x, Windows 11 23H2"
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Include exact commands, env vars, and fixture/test name.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / logs
+      description: Include HRESULT/device-removed/DRED/debug layer output. Remove personal paths/secrets.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Compliance
+      options:
+        - label: I did not attach proprietary game assets, dumps, or copyrighted content.
+          required: true
+        - label: This report does not request DRM/authentication/protection circumvention.
+          required: true

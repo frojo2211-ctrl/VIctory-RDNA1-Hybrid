@@ -1,0 +1,53 @@
+﻿name: GPU compatibility report
+description: Report GPU/driver-specific behavior with evidence
+title: "[GPU]: "
+labels: ["gpu-compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report GPU/driver behavior using owned fixtures when possible. Do not include proprietary content.
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU model
+      placeholder: "RX 5700 XT (RDNA1/GFX1010)"
+    validations:
+      required: true
+  - type: input
+    id: driver
+    attributes:
+      label: Driver version
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS / build
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Fixture/test
+      description: Name the owned fixture/test and exact command.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Result
+      description: PASS/FAIL, frame count, debug layer messages, device removed/HRESULT/DRED.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Compliance
+      options:
+        - label: I did not attach proprietary game assets or copyrighted content.
+          required: true

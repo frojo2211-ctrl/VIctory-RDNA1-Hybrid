@@ -1,0 +1,31 @@
+﻿name: Feature / improvement suggestion
+description: Suggest an improvement that aligns with project scope and legal boundaries
+title: "[Suggestion]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: How can this be validated with owned fixtures or legal evidence?
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Compliance
+      options:
+        - label: This suggestion does not involve DRM/authentication/protection circumvention.
+          required: true
+        - label: This suggestion does not require distributing proprietary game content.
+          required: true
