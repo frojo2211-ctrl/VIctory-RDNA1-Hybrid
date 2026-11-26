@@ -1479,28 +1479,31 @@ fn inflate(source: &[u8], out: &mut [u8]) -> Result<usize, HRESULT> {
     })
 }
 
-/// The BCPack format's constant tables, parsed once for the process. If
-/// they do not parse every BCPack request fails: one warning, then debug.
+/// The BCPack format's constant tables, parsed once for the process.
+///
+/// The public snapshot does not ship `bcpack-tables.bin`. BCPack-compressed
+/// DirectStorage requests therefore fail cleanly with `E_NOTIMPL` unless an
+/// authorized private build provides tables out-of-tree.
 fn bcpack_tables() -> Result<&'static Tables, HRESULT> {
     static TABLES: OnceLock<Result<Tables, String>> = OnceLock::new();
     static WARNED: AtomicBool = AtomicBool::new(false);
     match TABLES.get_or_init(load_bcpack_tables) {
         Ok(tables) => Ok(tables),
         Err(why) if !WARNED.swap(true, Ordering::Relaxed) => {
-            tracing::warn!("dstorage: BCPack requests fail: {why} (more at debug)");
+            tracing::warn!("dstorage: BCPack unavailable in this build: {why}");
             Err(E_NOTIMPL)
         }
         Err(_) => {
-            tracing::debug!("dstorage: BCPack request failed: no tables");
+            tracing::debug!("dstorage: BCPack unavailable in this build");
             Err(E_NOTIMPL)
         }
     }
 }
 
-/// The tables VIctory ships with.
+/// The public snapshot ships no built-in BCPack tables.
 #[cfg(not(test))]
 fn load_bcpack_tables() -> Result<Tables, String> {
-    Tables::builtin().map_err(|e| format!("the built-in BCPack tables: {e}"))
+    Tables::builtin().map_err(|e| e.to_string())
 }
 
 /// Tests decode streams made against tables of their own, from this folder.

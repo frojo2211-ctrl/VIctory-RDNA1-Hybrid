@@ -42,7 +42,7 @@ Searched tracked content for common personal path, username, local email, privat
 
 ## Risks / follow-up before publishing
 
-- **BLOCKER - BCPack tables provenance/license:** `crates/victory-formats/src/bcpack-tables.bin` is required by the decoder and documented as a format-constant exception, but its redistributable rights/provenance are not fully proven by in-repo evidence alone. Do **not** publish publicly until redistribution rights are clearly confirmed by the rights holder/project owner or the file is replaced with a provably redistributable/reconstructible alternative.
+- **Resolved for public snapshot - BCPack tables:** `bcpack-tables.bin` removed from tracked files and purged from public git history. BCPack is optional in this snapshot and fails cleanly when tables are unavailable. Do not re-add proprietary/unauthorized table data.
 - **History rewrite decision:** Public copy has clean history by design. If you want to publish original history, it must be scrubbed for personal/local metadata and sensitive references first.
 - **Upstream attribution completeness:** Review `CREDITS.md` and add any missing contributors/copyright notices required by GPL/source provenance.
 - **Docs accuracy:** README includes fixture results provided by project validation; ensure they map to the exact commit/tests you publish.

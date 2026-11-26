@@ -1,4 +1,4 @@
-//! BCPack: lossless packing of BC1-BC7 block streams, as the console's
+﻿//! BCPack: lossless packing of BC1-BC7 block streams, as the console's
 //! DirectStorage hardware unpacks them. Decode only; BC2 is left out (no
 //! title data uses it).
 //!
@@ -10,7 +10,9 @@
 //! dictionary that stands in for blocks -1 to -255) and the residuals of the
 //! endpoints and indices against them. The models, the index rank tables,
 //! the BC7 control codes and the dictionaries are constants of the format,
-//! kept in `bcpack-tables.bin` beside this file ([`Tables::builtin`]).
+//! kept in `bcpack-tables.bin` beside this file when available. The public
+//! snapshot does not ship these tables; [`Tables::builtin`] returns an error
+//! unless the tables are supplied by an authorized build.
 
 use std::fmt;
 
@@ -119,9 +121,17 @@ impl Reader<'_> {
 }
 
 impl Tables {
-    /// The tables VIctory ships with.
+    /// Built-in BCPack tables, when distributed with the build.
+    ///
+    /// The public `VIctory-RDNA1-Hybrid` snapshot does not include
+    /// `bcpack-tables.bin` because redistribution rights for those format
+    /// constants were not established for this public snapshot. Authorized
+    /// builds may provide the tables out-of-tree and parse them with
+    /// [`Tables::parse`].
     pub fn builtin() -> Result<Tables, Error> {
-        Tables::parse(include_bytes!("bcpack-tables.bin"))
+        Err(Error(
+            "BCPack tables are not included in this public snapshot; provide authorized bcpack-tables.bin out-of-tree",
+        ))
     }
 
     /// Reads the table file: 128 x 9 u16 model frequencies (per bucket, the
@@ -1164,8 +1174,8 @@ fn bc6<'a>(
 #[cfg(test)]
 mod tests {
     #[test]
-    fn the_shipped_tables_parse() {
-        assert!(super::Tables::builtin().is_ok());
+    fn builtin_tables_absent_in_public_snapshot() {
+        assert!(super::Tables::builtin().is_err());
     }
 
     use super::*;
@@ -1405,11 +1415,7 @@ mod tests {
                 narrow[(m * BUCKETS + b) * 2..][..2].copy_from_slice(&(f as u16).to_le_bytes());
             }
         }
-        for t in [
-            Tables::builtin().unwrap(),
-            Tables::parse(&tables()).unwrap(),
-            Tables::parse(&narrow).unwrap(),
-        ] {
+        for t in [Tables::parse(&tables()).unwrap(), Tables::parse(&narrow).unwrap()] {
             for model in 0..MODELS as u8 {
                 let start = &t.start[usize::from(model)];
                 for slot in 0..1u32 << 16 {
@@ -1456,7 +1462,6 @@ mod tests {
     #[test]
     fn payload_step_matches_the_reference_decode() {
         for t in [
-            Tables::builtin().unwrap(),
             Tables::parse(&tables()).unwrap(),
         ] {
             for model in 0..MODELS as u8 {
@@ -1596,13 +1601,11 @@ mod tests {
 
     /// A dictionary entry stands in for a block the decoder made: a set with
     /// 0 index bits holds no indices, and pixel 0 is the anchor (top bit clear).
+    /// This property is validated against shipped tables in authorized builds;
+    /// the public snapshot does not include those tables.
     #[test]
     fn bc7_dictionary_indices_line_up() {
-        let t = Tables::builtin().unwrap();
-        for (k, (_, ix)) in t.bc7.iter().enumerate() {
-            let anchor = 0..1 << (ix.bits[0] - 1);
-            let ok = (ix.bits[1] != 0 || ix.ix[1] == [0; 16]) && anchor.contains(&ix.ix[0][0]);
-            assert!(ok, "entry {k}: {:?}", ix.ix);
-        }
+        assert!(Tables::builtin().is_err());
     }
 }
+

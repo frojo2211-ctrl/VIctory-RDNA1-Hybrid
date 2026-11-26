@@ -31,6 +31,7 @@ These are active limitations. Do not interpret fixture passes as full compatibil
 - **Carded buffers / send integration:** Carded shadow refresh/Root SRV fixture passes, but **full carded send integration** is not fully validated (complete `send::take/record/give_back` + `card_before/prepare_card_before` submission flow, dirty-range concurrent ownership, copy-back/queue ordering under pressure, backing reuse under memory pressure).
 - **Streaming / complex scenes:** Streaming, residency, complex scene rendering, and real title workloads may expose synchronization, lifetime, memory pressure, or shader translation issues not covered by current fixtures. Stability and rendering of complex loads are **not proven**.
 - **No complete commercial app validation:** No claim of complete compatibility for commercial games/applications. Any title behavior is experimental and may crash, hang, render incorrectly, or perform poorly.
+- **BCPack optional in public snapshot:** `bcpack-tables.bin` is **not distributed** in this public snapshot due redistribution-rights review. BCPack-dependent DirectStorage compressed texture paths are unavailable and fail cleanly (`E_NOTIMPL`) unless an authorized private build supplies tables out-of-tree. Do not add or reconstruct proprietary table data.
 
 ## Hardware requirements
 
@@ -109,7 +110,7 @@ Expected evidence to capture:
 - **Repository license:** GPL-3.0-or-later (see `LICENSE`).
 - **Upstream/original project:** VIctory by Marvisak and contributors. This fork preserves upstream license and attribution.
 - **CGBJ/Cool Fox lineage:** This fork includes/integrates work derived from the Cool Fox / CGBJ line as part of its experimental history. Preserve original credits and license notices in redistributed source.
-- **BCPack tables exception:** `crates/victory-formats/src/bcpack-tables.bin` is a required format constant table file as documented by the project asset policy; it is distributed as a format constant, not as game content. Repository GPL license does not relicense third-party rights beyond what is permitted.
+- **BCPack tables not distributed:** `bcpack-tables.bin` is intentionally absent from this public snapshot pending redistribution-rights confirmation. BCPack-dependent functionality is optional and disabled in this snapshot; authorized private builds may supply tables out-of-tree.
 
 See `CREDITS.md` for attribution details.
 
