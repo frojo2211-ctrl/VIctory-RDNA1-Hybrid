@@ -12,7 +12,7 @@ This document records the audit performed while preparing `D:\VIctory-Hybrid-Pub
 
 - Tracked source code from checkpoint `7cc6bc3` (Rust workspace crates/apps/xtask/tests/docs/scripts/config).
 - `LICENSE` (GPL-3.0-or-later, preserved).
-- `crates/victory-formats/src/bcpack-tables.bin` (required BCPack format constant table; documented exception in asset policy).
+- `crates/victory-formats/src/bcpack-tables.bin` intentionally **not included** in public snapshot (redistribution rights unconfirmed). BCPack made optional.
 - New public docs: `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `ROADMAP.md`, `CREDITS.md`, `SECURITY.md`, `AUDIT.md`.
 - GitHub issue templates under `.github/ISSUE_TEMPLATE/`.
 
@@ -37,7 +37,7 @@ Searched tracked content for common personal path, username, local email, privat
 
 - Workspace declares `GPL-3.0-or-later` (`Cargo.toml`, crate manifests, `LICENSE`).
 - Upstream VIctory/Cool Fox lineage credited; GPL license preserved.
-- `bcpack-tables.bin` retained because project asset policy marks it as a required format-constant exception; it is not game content. Redistribution should keep this notice visible.
+- `bcpack-tables.bin` removed from tracked files and purged from public git history; `.gitignore` blocks re-addition.
 - No proprietary game assets, extracted shaders, dumps, or commercial binaries included.
 
 ## Risks / follow-up before publishing

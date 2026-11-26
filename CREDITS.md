@@ -18,7 +18,7 @@ This public snapshot is an experimental RDNA1-focused fork prepared for review. 
 
 ## Third-party data/constants
 
-- `crates/victory-formats/src/bcpack-tables.bin` - BCPack constant tables required to decode the format, as documented in `docs/asset-policy.md`. This file is a format constant exception; repository GPL license does not grant rights over third-party/proprietary content.
+- **BCPack tables (not distributed):** The public snapshot omits `bcpack-tables.bin`. Any authorized private use of such tables must respect their own rights/provenance; no such data is redistributed here.
 
 ## Acknowledgment policy
 
