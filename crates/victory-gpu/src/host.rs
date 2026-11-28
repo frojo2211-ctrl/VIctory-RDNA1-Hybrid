@@ -6919,10 +6919,27 @@ impl HostList {
         if barriers.is_empty() && syncs.is_empty() {
             return None;
         }
-        let Some((allocator, list)) = self
-            .prelude
-            .get_or_init(|| host().and_then(|h| h.make_prelude()))
-            .as_ref()
+        // A failure to make the prelude is NOT cached: `OnceLock::get_or_init`
+        // would store the `None` and every later use would fail at once. Retry
+        // instead, and say which branch produced `None` (a host-less thread, or
+        // a real HRESULT from `CreateCommandAllocator`/`CreateCommandList`).
+        let prelude = match self.prelude.get() {
+            Some(Some(made)) => Some(made.clone()),
+            _ => {
+                let made = match host() {
+                    Some(h) => h.make_prelude(),
+                    None => {
+                        tracing::warn!("state prelude: no host on this thread; will retry");
+                        None
+                    }
+                };
+                if let Some(made) = &made {
+                    let _ = self.prelude.set(Some(made.clone()));
+                }
+                made
+            }
+        };
+        let Some((allocator, list)) = prelude.as_ref()
         else {
             fail(format_args!("no host list for a state prelude"));
         };
